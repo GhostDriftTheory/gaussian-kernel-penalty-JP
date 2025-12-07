@@ -73,6 +73,11 @@
             line-height: 1.4;
             color: #111;
         }
+        
+        /* タイトルの文節維持用クラス (PCではインラインブロックで横並び可) */
+        .title-segment {
+            display: inline-block;
+        }
 
         .subtitle {
             font-size: 1.05rem;
@@ -281,18 +286,23 @@
                 line-height: 1.75;
             }
             h1 { 
-                font-size: 1.2rem; /* Mobile: Slightly smaller title */
-                line-height: 1.4;
+                font-size: 1.3rem; /* スマホでも見やすいサイズ */
+                line-height: 1.5;
             }
-            h1 br {
-                display: none; /* Disable forced line break on mobile for better flow */
+            
+            /* スマホではタイトルを美しく2行に強制する */
+            .title-segment {
+                display: block;
+                margin-bottom: 0.2rem;
             }
+            
             h2 { 
                 font-size: 1.25rem; 
                 margin-top: 3rem; 
             }
             .subtitle {
                 margin-bottom: 2rem;
+                font-size: 0.9rem;
             }
             .author {
                 margin-bottom: 4rem;
@@ -339,7 +349,10 @@
 <body>
 
     <header>
-        <h1>非凸ポテンシャル場における<br>制約充足への遷移モデル</h1>
+        <h1>
+            <span class="title-segment">非凸ポテンシャル場における</span>
+            <span class="title-segment">制約充足への遷移モデル</span>
+        </h1>
         <div class="subtitle">厳密ペナルティ法とポテンシャル変形による大域的最適化</div>
         <div class="author">GhostDrift数理研究所</div>
     </header>
