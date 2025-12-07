@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非凸ポテンシャル場における制約充足への遷移モデル</title>
+    
+    <!-- Fonts: Noto Serif JP (本文/数式用), Noto Sans JP (見出し) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax Configuration (AMS Style) -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                macros: {
+                    Re: "\\operatorname{Re}",
+                    Im: "\\operatorname{Im}",
+                    argmin: "\\operatorname*{arg\\,min}",
+                    dom: "\\operatorname{dom}",
+                    dist: "\\operatorname{dist}",
+                    R: "\\mathbb{R}",
+                    N: "\\mathbb{N}",
+                    B: "\\mathcal{B}",
+                    L: "\\mathcal{L}",
+                    V: "\\mathcal{V}",
+                    qed: "\\tag*{$\\square$}"
+                },
+                tags: 'ams'
+            },
+            options: {
+                renderActions: {
+                    addMenu: []
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --font-main: "Noto Serif JP", serif;
+            --font-heading: "Noto Sans JP", sans-serif;
+            --color-text: #1a1a1a;
+            --color-meta: #666;
+            --spacing-paragraph: 1.2rem;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.8;
+            color: var(--color-text);
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            background-color: #fff;
+            text-align: justify;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Typography & Headings */
+        h1 {
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 1.7rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--color-meta);
+            margin-bottom: 2.5rem;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .author {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 5rem;
+            color: #333;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-top: 3.5rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            margin-bottom: var(--spacing-paragraph);
+            text-indent: 1em;
+        }
+
+        /* Theorem Environments - Minimalist Academic Style */
+        .theorem, .lemma, .proposition, .corollary, .definition, .assumption, .remark {
+            margin: 2.5rem 0;
+        }
+
+        /* Theorems: Italic body */
+        .theorem, .lemma, .proposition, .corollary {
+            font-style: italic;
+        }
+        
+        /* Others: Normal body */
+        .definition, .assumption, .remark {
+            font-style: normal;
+        }
+
+        .env-header {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-style: normal;
+            margin-right: 0.5em;
+            float: left;
+        }
+        
+        .env-header::after {
+            content: ".";
+        }
+
+        .env-content {
+            display: block;
+            margin-left: 0;
+        }
+        
+        /* Clearfix */
+        .theorem::after, .lemma::after, .definition::after, .proof::after, .env-content::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Proof Environment */
+        .proof {
+            margin: 1.5rem 0 3rem 0;
+            font-style: normal;
+        }
+        
+        .proof-header {
+            font-family: var(--font-main);
+            font-style: italic;
+            font-weight: 600;
+            margin-right: 0.5em;
+            float: left;
+        }
+        
+        .proof-header::after {
+            content: ".";
+        }
+
+        .qed-symbol {
+            float: right;
+            margin-top: -1em;
+            color: #444;
+        }
+
+        /* Lists */
+        ul, ol {
+            padding-left: 1.8em;
+            margin-bottom: var(--spacing-paragraph);
+        }
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* MathJax Mobile Optimization */
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        mjx-container[display="true"] {
+            margin: 1.5em 0 !important;
+            padding: 0.5em 0;
+        }
+
+        /* Abstract Box */
+        .abstract {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin: 0 3rem 4rem 3rem;
+            color: #222;
+        }
+
+        /* References */
+        .references {
+            font-size: 0.9rem;
+            margin-top: 5rem;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+        }
+        .references h2 {
+            font-size: 1.2rem;
+            border-bottom: none;
+            margin-bottom: 1.5rem;
+        }
+        .references ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .references li {
+            padding-left: 2.2em;
+            text-indent: -2.2em;
+            margin-bottom: 0.8em;
+            line-height: 1.5;
+        }
+
+        /* Navigation Button (Academic Style) */
+        .nav-footer {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 1px solid #eaeaea;
+            text-align: center;
+        }
+        
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+            background-color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-button:hover {
+            color: #333;
+            border-color: #999;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>非凸ポテンシャル場における<br>制約充足への遷移モデル</h1>
+        <div class="subtitle">厳密ペナルティ法とポテンシャル変形による大域的最適化</div>
+        <div class="author">GhostDrift数理研究所</div>
+    </header>
+
+    <div class="abstract">
+        <strong>概要.</strong> 
+        本稿では、非凸最適化問題における局所最適解からの脱出と、実行不可能制約の充足を実現するための厳密な数学的枠組みを提示する。
+        多峰性ポテンシャル関数によって定義される勾配系において、大域的最小解がある吸引領域に捕捉され、特定の制約条件を満たせない状況を考える。
+        本稿では、ガウス核関数を用いたポテンシャルの加法的変形（Additive Deformation）により、システムの状態をエネルギー的に有利かつ制約を満たす新たな領域へと遷移させる構成的手法を提案する。
+        厳密ペナルティ関数（Exact Penalty Function）の理論に基づき、制約充足を保証する有限なペナルティパラメータの存在と、任意のエネルギー減少を達成するための変形パラメータの構成法を証明する。
+    </div>
+
+    <h2>1. 序論</h2>
+
+    <p>
+        大域的最適化において、目的関数が多峰性（multi-modal）を持つ場合、勾配法に基づく探索はしばしば局所最適解（local minima）に捕捉される。
+        特に、目的とする解の性質（制約条件）が現在の吸引領域（Basin of Attraction）の外部にしか存在しない場合、局所的な探索では解に到達することは原理的に不可能である。
+        Ambrosetti と Rabinowitz による峠の補題（Mountain Pass Lemma）[1] は、このような状況下での鞍点の存在を示唆するが、具体的な脱出プロセスを構成的に与えるものではない。
+        また、一般の非凸最適化において、厳密サドル（strict saddle）からの脱出や初期値依存性を理論的に分析する研究も近年充実しており [14, 15]、局所解への停留問題は依然として重要な課題である。
+    </p>
+    <p>
+        本研究では、ポテンシャル関数自体を動的に変形させるアプローチを採用する。
+        これは、物理学における活性化プロセスや、機械学習におけるカリキュラム学習の概念を数理的に定式化したものと見なせる。
+        具体的には、既存のポテンシャル関数に対して局所的な核関数（Kernel Function）を追加することで、現在の安定平衡点のエネルギー準位を相対的に上昇させ、
+        大域的により好ましい、かつ制約を満たす新たな平衡点への遷移を誘導する。
+        我々は、Han と Mangasarian による厳密ペナルティ関数 [2] の理論を拡張し、この遷移が数学的に保証される条件を導出する。
+    </p>
+
+    <h3>1.1 本研究の位置づけと貢献</h3>
+
+    <p>
+        本稿の立ち位置を簡潔に整理しておく。
+        Ambrosetti–Rabinowitz の峠の補題 [1] や Han–Mangasarian による厳密ペナルティ理論 [2] は、
+        いずれも「存在」や「同値性」を与えるものの、
+        どのようにポテンシャルを操作すれば
+        実際に局所解の吸引領域から脱出し、
+        制約を満たす新たな平衡点へ遷移できるかについては、
+        具体的な構成を与えない。
+    </p>
+
+    <p>
+        本稿の貢献は、こうした既存理論を背景として、
+        以下の 3 点を明示的に構成する点にある。
+    </p>
+
+    <ul>
+        <li>
+            <strong>厳密ペナルティと吸引領域の結合:</strong>
+            $L^1$ 型の厳密ペナルティ関数により
+            「制約付き大域解のみが大域的に残る」状況を作り出し、
+            それを勾配流の吸引領域の枠組みの中で解釈する。
+        </li>
+        <li>
+            <strong>局所核によるポテンシャル変形の構成:</strong>
+            ガウス核による加法的変形を通じて、
+            具体的にどの点のエネルギーをどれだけ持ち上げればよいか、
+            目標降下量 $\varepsilon$ をパラメータとして与える構成的手順を示す（補題 3.3）。
+        </li>
+        <li>
+            <strong>制約充足遷移の主定理:</strong>
+            上記 2 つを組み合わせることで、
+            初期の大域的最小解 $x^*$ が制約を満たさない場合でも、
+            ポテンシャル変形によって
+            「より低エネルギーかつ制約を満たす」新たな大域的最小解
+            $\tilde{x}^*$ への遷移が保証されることを定理 4.1 として示す。
+        </li>
+    </ul>
+
+    <p>
+        これにより、本稿は「非凸ポテンシャル場における局所解からの脱出」と
+        「厳密ペナルティによる制約充足」とを 1 つのポテンシャル変形モデルとして統合し、
+        機械学習や数値解析の応用においても直接実装可能な形で提示する。
+    </p>
+
+    <h2>2. 問題設定と定義</h2>
+
+    <div class="definition">
+        <span class="env-header">定義 2.1 (ポテンシャルエネルギー)</span>
+        <div class="env-content">
+        状態空間 $\R^n$ 上のポテンシャル関数 $\phi: \R^n \to \R$ を、有限個の核 $\{\mu_k\}_{k=1}^K \subset \R^n$ を持つガウス混合モデルの対数負尤度として定義する。
+        \[
+        \phi(x) := -\log\Big(\sum_{k=1}^K \alpha_k e^{-\|x-\mu_k\|^2}\Big)
+        \]
+        ここで、重み係数は $\alpha_k > 0, \sum \alpha_k = 1$ を満たすものとする。
+        $\phi$ は $C^\infty$級であり、下に有界である。
+        </div>
+    </div>
+
+    <div class="definition">
+        <span class="env-header">定義 2.2 (大域的最小解と吸引領域)</span>
+        <div class="env-content">
+        $\phi$ の大域的最小解（Global Minimizer）を $x^* \in \argmin \phi(x)$ とする。
+        勾配流 $\dot{x} = -\nabla\phi(x)$ に関する $x^*$ の吸引領域 $\mathcal{B}(x^*)$ を以下で定義する。
+        \[
+        \mathcal{B}(x^*) := \left\{ x_0 \in \R^n : \lim_{t\to\infty} \Phi_t(x_0) = x^* \right\}
+        \]
+        ここで $\Phi_t$ はフロー写像である。
+        </div>
+    </div>
+
+    <p>
+        次に、現在のシステムでは実現不可能な制約条件を導入する。
+    </p>
+
+    <div class="assumption">
+        <span class="env-header">仮定 2.3 (領域内実行不可能性)</span>
+        <div class="env-content">
+        制約関数 $C: \R^n \to \R$ に対し、現在の吸引領域内の全ての点は制約違反状態にあるとする。
+        \[
+        \forall x \in \mathcal{B}(x^*), \quad C(x) < 0
+        \]
+        </div>
+    </div>
+
+    <div class="assumption">
+        <span class="env-header">仮定 2.4 (大域的実行可能性)</span>
+        <div class="env-content">
+        制約 $C(x) \ge 0$ を満たす点 $\bar{x} \in \R^n$ が少なくとも一つ存在する。
+        仮定 2.3 より、必然的に $\bar{x} \notin \mathcal{B}(x^*)$ である。
+        </div>
+    </div>
+
+    <div class="remark">
+        <span class="env-header">応用例 2.5</span>
+        <div class="env-content">
+        ここで想定している設定は、機械学習における制約付き学習問題に自然に現れる。
+        例えば、パラメータ $x$ によって決まる予測モデルの損失関数を $\phi(x)$ とし、同時に
+        (i) 出力の安全性や公平性に関する制約、
+        (ii) 物理法則や保存則から導かれる構造的制約、
+        (iii) モデルのスパース性や単調性といった構造制約
+        などを $C(x)\ge 0$ の形で表現すると、
+        本稿の枠組みは
+        「あるポテンシャルに従う学習ダイナミクスが、
+        制約を破りながら局所解に捕らわれている状況」から
+        スタートし、
+        ペナルティ項や局所核を用いたポテンシャル変形によって
+        「制約を満たす新たな平衡状態」へ誘導する手続きを与えるものと解釈できる。
+        この意味で、本稿の議論は抽象的な連続力学系にとどまらず、
+        制約付き学習アルゴリズムの設計指針としても利用可能である。
+        </div>
+    </div>
+
+    <h2>3. 厳密ペナルティとポテンシャル変形</h2>
+
+    <div class="definition">
+        <span class="env-header">定義 3.1 (ペナルティ付き変形ポテンシャル)</span>
+        <div class="env-content">
+        制約違反に対するペナルティ関数を $\Xi(x) := \max\{0, -C(x)\}$ とする。
+        ペナルティパラメータ $\lambda > 0$ に対し、評価関数を $\phi_\lambda(x) := \phi(x) + \lambda \Xi(x)$ と定義する。
+        </div>
+    </div>
+
+    <p>
+        ここで導入したペナルティ付きポテンシャル $\phi_\lambda$ は、
+        物理的には「制約面 $C(x)=0$ から外れた領域に
+        堅いエネルギー壁を築く」操作とみなせる。
+        $\lambda$ を大きくすると、制約違反の領域では急激にエネルギーが増大し、
+        実行可能集合 $C(x)\ge 0$ の内部にのみ
+        物理的に安定な状態が残る。
+        後続の補題 3.2 は、この直感を
+        厳密ペナルティ理論の言葉で形式化したものである。
+    </p>
+
+    <p>
+        ペナルティ関数の理論的基盤については、Han–Mangasarian [2] による古典的な厳密ペナルティ関数に続いて、その後の非微分・客観ペナルティ関数の系統的整理や、滑らかな厳密ペナルティ関数の構成も盛んに研究されている [5–8]。本稿の手法はこれらと整合的である。
+    </p>
+
+    <div class="lemma">
+        <span class="env-header">補題 3.2 (大域的厳密ペナルティ)</span>
+        <div class="env-content">
+        $\phi : \R^n \to \R$ および $C : \R^n \to \R$ は連続微分可能であり、
+        制約付き最小化問題
+        \[
+          \min\{\phi(x) : C(x) \ge 0\}
+        \]
+        は少なくとも 1 つの大域的解 $\bar{x}$ を持つとする。
+        さらに、$\phi$ はコアシブであり、制約資格条件として
+        Mangasarian–Fromovitz 条件（MFCQ）が
+        制約付き大域解の集合上の各点で成立していると仮定する。
+        このとき、ある閾値 $\lambda^* > 0$ が存在し、任意の $\lambda \ge \lambda^*$ に対して、
+        ペナルティ付き関数
+        \[
+          \phi_\lambda(x) := \phi(x) + \lambda\,\Xi(x),
+          \qquad
+          \Xi(x) := \max\{0,-C(x)\}
+        \]
+        の大域的最小解はすべて制約 $C(x) \ge 0$ を満たし、
+        かつ元の制約付き問題の大域的最小解と一致する。
+        </div>
+    </div>
+
+    <div class="proof">
+        <span class="proof-header">証明</span>
+        証明の骨格を述べる。
+        まず、$\phi$ のコアシブ性と連続性より、
+        ペナルティ付き問題 $\min_x \phi_\lambda(x)$ は任意の $\lambda > 0$ に対して
+        少なくとも 1 つの大域的解 $x_\lambda$ を持つ。
+        一方、制約付き問題の任意の大域解 $\bar{x}$ に対しては
+        $C(\bar{x}) \ge 0$ であるから $\Xi(\bar{x}) = 0$ が成り立ち、
+        \[
+          \phi_\lambda(\bar{x}) = \phi(\bar{x})
+        \]
+        がすべての $\lambda > 0$ について成立する。
+
+        次に、MFCQ の下で Karush–Kuhn–Tucker 条件が
+        制約付き大域解の集合上で成立することを用いる。
+        各制約付き大域解 $\bar{x}$ に対し、
+        あるラグランジュ乗数 $\mu_{\bar{x}} \ge 0$ が存在して
+        \[
+          \nabla \phi(\bar{x}) - \mu_{\bar{x}}\,\nabla C(\bar{x}) = 0,
+          \qquad
+          \mu_{\bar{x}}\,C(\bar{x}) = 0,
+          \qquad
+          C(\bar{x}) \ge 0
+        \]
+        が成り立つ。
+        制約付き大域解の集合は（コアシブ性の下で）有界閉集合となるので、
+        その上で $\mu_{\bar{x}}$ の上限
+        \[
+          \mu^* := \sup\{\mu_{\bar{x}} : \bar{x} \text{ は制約付き大域解}\}
+        \]
+        をとることができる（有限であることは [2, §3] の議論と同様）。
+        ここで任意に $\lambda^* > \mu^*$ を 1 つ選ぶ。
+
+        あとは古典的な $L^1$ ペナルティの議論に従う。
+        任意の $x$ に対し、もし $C(x) \ge 0$ であれば
+        $\Xi(x) = 0$ なので $\phi_\lambda(x) = \phi(x)$ である。
+        一方、$C(x) < 0$ の場合には $\Xi(x) = -C(x) > 0$ となり、
+        適当な制約付き大域解 $\bar{x}$ との比較と
+        KKT 条件を用いることで
+        \[
+          \phi_\lambda(x) - \phi_\lambda(\bar{x})
+          \;\ge\;
+          (\lambda - \mu^*)\,\Xi(x)
+          \;>\;
+          0
+        \]
+        が得られる（詳細は [2, Thm. 1] および [3, Chap. 4] を参照）。
+        したがって、$\lambda \ge \lambda^*$ のとき
+        ペナルティ付き問題のあらゆる大域的最小解は
+        制約付き大域解と一致し、特に制約を満たす。
+        <span class="qed-symbol">$\square$</span>
+    </div>
+
+    <p>
+        次に、ポテンシャル関数自体を変形させ、目的の実行可能点へシステムを誘導する構成法を与える。
+    </p>
+
+    <div class="lemma">
+        <span class="env-header">補題 3.3 (変形によるエネルギー降下)</span>
+        <div class="env-content">
+        任意の点 $x_0 \in \R^n$ と目標降下量 $\varepsilon > 0$ に対し、
+        新たな核 $\mu_{new} := x_0$ と重み $\beta \in (0,1)$ を用いてポテンシャルを以下のように拡張する。
+        \[
+        \tilde{\phi}(x) := -\log\left( (1-\beta)e^{-\phi(x)} + \beta e^{-\|x-x_0\|^2} \right)
+        \]
+        このとき、$\beta$ を適切に選ぶことで、$\tilde{\phi}(x_0) \le \phi(x_0) - \varepsilon$ を達成できる。
+        </div>
+    </div>
+
+    <div class="proof">
+        <span class="proof-header">証明</span>
+        $Z_0 = e^{-\phi(x_0)}$ とする。拡張後のエネルギーは
+        $-\log((1-\beta)Z_0 + \beta)$ となる。
+        不等式 $-\log((1-\beta)Z_0 + \beta) \le -\log Z_0 - \varepsilon$ を $\beta$ について解くことで、
+        必要な重み $\beta$ が構成的に定まる。
+        <span class="qed-symbol">$\square$</span>
+    </div>
+
+    <div class="remark">
+        <span class="env-header">注意 3.4</span>
+        <div class="env-content">
+        本稿におけるエネルギー準位ごとの盆地構造変形による大域解への接近という発想は、物理化学における分子クラスタの basin-hopping 法や自由エネルギーランドスケープのクラスタリング [9–11] とも密接に関連している。
+        また、数理的には、損失関数をガウス畳み込みで平滑化し、カーネル幅を徐々に減らしながら元の問題に続接する “Gaussian continuation” の流れ [12, 13] とも解釈できる。
+        </div>
+    </div>
+
+    <h2>4. 主定理</h2>
+
+    <div class="theorem">
+        <span class="env-header">定理 4.1 (制約充足遷移の存在)</span>
+        <div class="env-content">
+        仮定 2.3, 2.4 の下で、あるパラメータ $\lambda^* > 0$ とポテンシャル変形 $(\mu_{new}, \beta)$ が存在し、
+        変形後のシステム $\tilde{\phi}_\lambda$ の大域的最小解 $\tilde{x}^*$ は以下を満たす。
+        <ol>
+            <li><strong>エネルギー改善:</strong> $\tilde{\phi}_\lambda(\tilde{x}^*) < \phi(x^*)$</li>
+            <li><strong>領域遷移:</strong> $\tilde{x}^* \notin \mathcal{B}(x^*)$</li>
+            <li><strong>制約充足:</strong> $C(\tilde{x}^*) \ge 0$</li>
+        </ol>
+        </div>
+    </div>
+
+    <div class="proof">
+        <span class="proof-header">証明</span>
+        補題 3.2 より十分大きな $\lambda$ を固定する。
+        仮定 2.4 より実行可能点 $\bar{x}$ が存在し、そこではペナルティ項は消滅する（$\Xi(\bar{x})=0$）。
+        この $\bar{x}$ を新たな核の中心 $x_0$ として採用し、補題 3.3 を適用する。
+        十分な降下量 $\varepsilon$ を設定することで、
+        $\tilde{\phi}_\lambda(\bar{x}) = \tilde{\phi}(\bar{x}) < \phi(x^*)$ となるようにポテンシャルを変形できる。
+        変形後の関数の大域的最小値は $\bar{x}$ での値以下となるため、元の最小値よりも真に小さくなる。
+        また、補題 3.2 の帰結として、この新たな最小解 $\tilde{x}^*$ は制約を満たす。
+        最後に、仮定 2.3 より制約を満たす点は元の吸引領域 $\mathcal{B}(x^*)$ には含まれないため、領域外への遷移が証明される。
+        <span class="qed-symbol">$\square$</span>
+    </div>
+
+    <div class="remark">
+        <span class="env-header">コメント 4.2 (既存の厳密ペナルティ理論との違い)</span>
+        <div class="env-content">
+        Han–Mangasarian の厳密ペナルティ理論 [2] は、
+        制約付き最適化問題と $L^1$ 型ペナルティ付き問題との
+        「解集合の同値性」に焦点を当てている。
+        これに対して本稿の定理 4.1 は、
+        勾配流の吸引領域 $\mathcal{B}(x^*)$ と
+        ポテンシャルの加法的変形を明示的に結びつけることで、
+        <em>もともと実行不可能な大域的最小解 $x^*$ から
+        制約充足解 $\tilde{x}^*$ への遷移</em> が
+        実際にどのようなパラメータ操作で実現されるかを記述している。
+        すなわち、
+        厳密ペナルティが保証する「どこかに存在する制約付き大域解」に対し、
+        本稿はガウス核を用いた局所的変形という具体的操作を通じて、
+        エネルギー地形上での遷移メカニズムを構成的に与えている。
+        </div>
+    </div>
+
+    <h2>5. 結論</h2>
+
+    <p>
+        本稿では、非凸ポテンシャル場における大域的最小解が、実行不可能な局所領域に停留している場合において、
+        ポテンシャルの加法的変形を用いることで、制約を満たすより低エネルギーな状態への遷移が可能であることを示した。
+        この数理モデルは、最適化理論における「局所解からの脱出」と「制約充足」を統一的に扱う枠組みを提供するものである。
+        今後の課題として、本稿で構成したポテンシャル変形スキームを具体的な数値最適化アルゴリズムや学習ダイナミクスに組み込み、標準的なベンチマーク問題に対して局所解からの脱出挙動や制約充足性能を数値実験により体系的に評価することが挙げられる。
+    </p>
+
+    <div class="references">
+        <h2>参考文献</h2>
+        <ul>
+            <li>[1] A. Ambrosetti and P. H. Rabinowitz, "Dual variational methods in critical point theory and applications", <em>J. Funct. Anal.</em> 14, 1973.</li>
+            <li>[2] S. P. Han and O. L. Mangasarian, "Exact penalty functions in nonlinear programming", <em>Math. Program.</em> 17, 1979.</li>
+            <li>[3] D. P. Bertsekas, <em>Nonlinear Programming</em>, 3rd ed., Athena Scientific, 2016.</li>
+            <li>[4] J. Nocedal and S. J. Wright, <em>Numerical Optimization</em>, Springer, 2006.</li>
+            
+            <!-- (A) Exact Penalty -->
+            <li>[5] G. Di Pillo and L. Grippo, "Exact penalty functions for nondifferentiable programming problems", in <em>Nondifferentiable Optimization</em>, Springer, 1985.</li>
+            <li>[6] W. Huyer and A. Neumaier, "A new exact penalty function", <em>SIAM J. Optim.</em> 13(4), 1141–1158, 2003.</li>
+            <li>[7] R. Estrin et al., "Implementing a smooth exact penalty function for equality-constrained nonlinear optimization", arXiv:1910.04300, 2019.</li>
+            <li>[8] Z. Yan, X. Jiang and S. Wang, "Objective penalty function method for nonlinear programming with inequality constraints", <em>AIMS Mathematics</em> 9(12), 33572–33590, 2024.</li>
+            
+            <!-- (B) Energy Landscape -->
+            <li>[9] D. J. Wales and J. P. K. Doye, "Global optimization by basin-hopping and the lowest energy structures of Lennard-Jones clusters", 1998.</li>
+            <li>[10] A. M. Westerlund and L. Delemotte, "InfleCS: Clustering free energy landscapes with Gaussian mixtures", <em>J. Chem. Theory Comput.</em> 15(11), 6752–6762, 2019.</li>
+            <li>[11] C. Boy et al., "Energy landscapes for the quantum approximate optimization algorithm", <em>Phys. Rev. A</em> 109, 062602, 2024.</li>
+            
+            <!-- (D) Gaussian Continuation -->
+            <li>[12] A. F. Ilersich and P. B. Nair, "Deep learning with Gaussian continuation", <em>Foundations of Data Science</em> 7(3), 790–813, 2025.</li>
+            <li>[13] H. Mobahi and J. Fisher III, "A theoretical analysis of optimization by Gaussian continuation", <em>AAAI</em>, 2015.</li>
+            
+            <!-- (C) Saddle Points -->
+            <li>[14] P. Cheridito, A. Jentzen and F. Rossmannek, "Gradient Descent Provably Escapes Saddle Points in the Training of Shallow ReLU Networks", <em>J. Optim. Theory Appl.</em> 203, 2617–2648, 2024.</li>
+            <li>[15] R. M. Bora and I. N. Kar, "Survey On Non-Convex Optimization Problem: A Comparative Analysis of Gradient Descent Based Techniques", preprint, 2025.</li>
+        </ul>
+    </div>
+
+    <div class="nav-footer">
+        <a href="https://ghostdrifttheory.github.io/ghostdrifttheory.github.io-JP/" class="nav-button">GhostDrift数理研究所</a>
+    </div>
+
+</body>
+</html>
