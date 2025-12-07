@@ -44,19 +44,20 @@
         :root {
             --font-main: "Noto Serif JP", serif;
             --font-heading: "Noto Sans JP", sans-serif;
-            --color-text: #1a1a1a;
+            --color-text: #222;
             --color-meta: #666;
-            --spacing-paragraph: 1.2rem;
+            --spacing-paragraph: 1.5rem;
+            --bg-color: #fff;
         }
 
         body {
             font-family: var(--font-main);
-            line-height: 1.8;
+            line-height: 1.9;
             color: var(--color-text);
-            max-width: 760px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 4rem 1.5rem;
-            background-color: #fff;
+            padding: 5rem 2rem;
+            background-color: var(--bg-color);
             text-align: justify;
             -webkit-font-smoothing: antialiased;
         }
@@ -65,45 +66,49 @@
         h1 {
             font-family: var(--font-main);
             font-weight: 700;
-            font-size: 1.7rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
             text-align: center;
             letter-spacing: 0.05em;
-            line-height: 1.3;
+            line-height: 1.4;
+            color: #111;
         }
 
         .subtitle {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--color-meta);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             text-align: center;
             font-weight: 400;
         }
 
         .author {
             font-family: var(--font-heading);
-            font-size: 0.95rem;
+            font-size: 1rem;
             text-align: center;
-            margin-bottom: 5rem;
+            margin-bottom: 6rem;
             color: #333;
+            font-weight: 500;
         }
 
         h2 {
             font-family: var(--font-heading);
             font-weight: 700;
-            font-size: 1.3rem;
-            margin-top: 3.5rem;
-            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
             border-bottom: 1px solid #eee;
-            padding-bottom: 0.3rem;
+            padding-bottom: 0.5rem;
+            color: #111;
         }
 
         h3 {
             font-family: var(--font-heading);
             font-weight: 600;
-            font-size: 1.1rem;
-            margin-top: 2rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.15rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #333;
         }
 
         p {
@@ -111,18 +116,35 @@
             text-indent: 1em;
         }
 
+        /* Abstract Box */
+        .abstract {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin: 0 4rem 5rem 4rem;
+            color: #333;
+            background-color: #fcfcfc;
+            padding: 1.5rem 2rem;
+            border-left: 3px solid #ddd;
+        }
+
         /* Theorem Environments - Minimalist Academic Style */
         .theorem, .lemma, .proposition, .corollary, .definition, .assumption, .remark {
-            margin: 2.5rem 0;
+            margin: 3rem 0;
+            padding-left: 0.5rem;
         }
 
         /* Theorems: Italic body */
-        .theorem, .lemma, .proposition, .corollary {
+        .theorem .env-content, 
+        .lemma .env-content, 
+        .proposition .env-content, 
+        .corollary .env-content {
             font-style: italic;
         }
         
         /* Others: Normal body */
-        .definition, .assumption, .remark {
+        .definition .env-content, 
+        .assumption .env-content, 
+        .remark .env-content {
             font-style: normal;
         }
 
@@ -130,8 +152,9 @@
             font-family: var(--font-heading);
             font-weight: 700;
             font-style: normal;
-            margin-right: 0.5em;
+            margin-right: 0.6em;
             float: left;
+            color: #222;
         }
         
         .env-header::after {
@@ -141,6 +164,7 @@
         .env-content {
             display: block;
             margin-left: 0;
+            color: #333;
         }
         
         /* Clearfix */
@@ -152,7 +176,7 @@
 
         /* Proof Environment */
         .proof {
-            margin: 1.5rem 0 3rem 0;
+            margin: 2rem 0 4rem 0;
             font-style: normal;
         }
         
@@ -160,8 +184,9 @@
             font-family: var(--font-main);
             font-style: italic;
             font-weight: 600;
-            margin-right: 0.5em;
+            margin-right: 0.6em;
             float: left;
+            color: #444;
         }
         
         .proof-header::after {
@@ -170,91 +195,144 @@
 
         .qed-symbol {
             float: right;
-            margin-top: -1em;
-            color: #444;
+            margin-top: -1.2em;
+            color: #666;
+            font-size: 1.2em;
         }
 
         /* Lists */
         ul, ol {
-            padding-left: 1.8em;
+            padding-left: 2em;
             margin-bottom: var(--spacing-paragraph);
         }
         li {
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
         }
 
         /* MathJax Mobile Optimization */
         mjx-container {
-            overflow-x: auto;
+            overflow-x: auto !important;
             overflow-y: hidden;
             max-width: 100%;
             -webkit-overflow-scrolling: touch;
+            padding: 0.5em 0;
         }
         mjx-container[display="true"] {
             margin: 1.5em 0 !important;
-            padding: 0.5em 0;
         }
-
-        /* Abstract Box */
-        .abstract {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin: 0 3rem 4rem 3rem;
-            color: #222;
+        /* Make inline math wrap if possible, though MathJax handles this mostly */
+        mjx-container[jax="CHTML"][display="false"] {
+            white-space: normal !important;
         }
 
         /* References */
         .references {
             font-size: 0.9rem;
-            margin-top: 5rem;
+            margin-top: 6rem;
             border-top: 1px solid #eee;
-            padding-top: 2rem;
+            padding-top: 3rem;
         }
         .references h2 {
             font-size: 1.2rem;
             border-bottom: none;
             margin-bottom: 1.5rem;
+            margin-top: 0;
         }
         .references ul {
             list-style: none;
             padding-left: 0;
         }
         .references li {
-            padding-left: 2.2em;
-            text-indent: -2.2em;
+            padding-left: 2.5em;
+            text-indent: -2.5em;
             margin-bottom: 0.8em;
-            line-height: 1.5;
+            line-height: 1.6;
+            color: #444;
         }
 
         /* Navigation Button (Academic Style) */
         .nav-footer {
-            margin-top: 6rem;
+            margin-top: 8rem;
             padding-top: 3rem;
-            border-top: 1px solid #eaeaea;
+            border-top: 1px solid #f0f0f0;
             text-align: center;
+            margin-bottom: 4rem;
         }
         
         .nav-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
             text-decoration: none;
             font-family: var(--font-heading);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: #666;
-            background-color: #fff;
-            padding: 0.8rem 1.5rem;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
             letter-spacing: 0.05em;
         }
-
         .nav-button:hover {
-            color: #333;
-            border-color: #999;
-            background-color: #fafafa;
+            color: #000;
+        }
+
+        /* Mobile Specifics (Responsive Design) */
+        @media (max-width: 600px) {
+            body {
+                padding: 3rem 1.2rem;
+                font-size: 0.95rem;
+                line-height: 1.75;
+            }
+            h1 { 
+                font-size: 1.2rem; /* Mobile: Slightly smaller title */
+                line-height: 1.4;
+            }
+            h1 br {
+                display: none; /* Disable forced line break on mobile for better flow */
+            }
+            h2 { 
+                font-size: 1.25rem; 
+                margin-top: 3rem; 
+            }
+            .subtitle {
+                margin-bottom: 2rem;
+            }
+            .author {
+                margin-bottom: 4rem;
+            }
+            .abstract { 
+                margin: 0 0 3.5rem 0; 
+                padding: 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            /* Float解除: スマホでは見出しと本文を縦に積む */
+            .env-header, .proof-header {
+                float: none;
+                display: block;
+                margin-bottom: 0.3rem;
+                margin-right: 0;
+            }
+            .env-content {
+                margin-left: 0.5em; /* 少しインデント */
+            }
+            
+            .theorem, .definition, .proof, .lemma, .remark { 
+                margin: 2.5rem 0; 
+            }
+            
+            .qed-symbol {
+                float: right;
+                margin-top: 0;
+            }
+            
+            .nav-footer {
+                margin-top: 5rem;
+                padding-top: 2rem;
+            }
+            
+            /* 参考文献のインデント調整 */
+            .references li {
+                padding-left: 1.5em;
+                text-indent: -1.5em;
+            }
         }
     </style>
 </head>
